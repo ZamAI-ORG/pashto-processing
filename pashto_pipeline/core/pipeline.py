@@ -3,7 +3,7 @@ Text Processing Pipeline
 Main pipeline class for orchestrating text processing steps.
 """
 
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from tqdm import tqdm
 
@@ -29,7 +29,7 @@ class TextProcessingPipeline:
         Args:
             config: Optional configuration dictionary for the pipeline
         """
-        self.steps: List[tuple[str, Callable]] = []
+        self.steps: List[Tuple[str, Callable, Dict]] = []
         self.config = config or {}
         
     def add_step(self, name: str, function: Callable, **kwargs) -> 'TextProcessingPipeline':

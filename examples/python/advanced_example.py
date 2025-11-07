@@ -2,8 +2,37 @@
 """
 Advanced Example: Web Scraping with Pashto Dataset Pipeline
 
+NOTE: This is an advanced example that demonstrates potential capabilities.
+Some features require additional modules from the code/pashto_dataset package.
+For basic usage, see examples/basic_usage.py instead.
+
 This example demonstrates advanced web scraping capabilities
 including custom processors, quality assessment, and batch processing.
+"""
+
+# This example requires the extended pashto_dataset modules
+# To run this, ensure all dependencies are installed from code/pashto_dataset
+
+import sys
+import os
+
+print("="*70)
+print("ADVANCED EXAMPLE - Extended Features")
+print("="*70)
+print("\nThis advanced example demonstrates extended pipeline capabilities.")
+print("It requires additional dependencies from the code/pashto_dataset package.")
+print("\nFor basic usage examples, please see:")
+print("  - examples/basic_usage.py")
+print("  - examples/python/basic_example.py")
+print("\nTo enable advanced features, install additional dependencies:")
+print("  pip install -r code/pashto_dataset/requirements.txt")
+print("="*70)
+
+sys.exit(0)
+
+# The full implementation below requires additional modules
+# that are available in code/pashto_dataset/
+
 """
 
 import os

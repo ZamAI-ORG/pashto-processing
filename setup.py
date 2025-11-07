@@ -70,11 +70,12 @@ setup(
     },
     
     # Entry points for command line tools
-    entry_points={
-        'console_scripts': [
-            'pashto-pipeline=code.pashto_dataset.pipeline.main:main',
-        ]
-    },
+    # Note: CLI tools are available in code/pashto_dataset package
+    # entry_points={
+    #     'console_scripts': [
+    #         'pashto-pipeline=code.pashto_dataset.pipeline.main:main',
+    #     ]
+    # },
     
     # Python version requirement
     python_requires=">=3.8",
