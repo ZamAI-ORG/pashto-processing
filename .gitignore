@@ -142,3 +142,12 @@ models/*
 !models/.gitkeep
 outputs/*
 !outputs/.gitkeep
+logs/*
+!logs/.gitkeep
+configs/*
+!configs/.gitkeep
+
+# Downloaded package
+package.zip
+*.zip
+package.zip
