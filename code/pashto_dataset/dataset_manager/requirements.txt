@@ -1,0 +1,29 @@
+# Hugging Face Dataset Management System Requirements
+# Core dependencies for dataset creation and management
+
+# Core machine learning and data processing
+datasets>=2.14.0
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Hugging Face Hub integration
+huggingface_hub>=0.16.0
+
+# Utilities and helpers
+pathlib
+psutil>=5.9.0
+pyyaml>=6.0
+packaging>=23.0
+
+# Data serialization and storage
+pickle-mixin>=1.0.2
+
+# Optional: For advanced text processing
+# langdetect>=1.0.9
+# polyglot>=16.7.4
+
+# Development and testing (optional)
+# pytest>=7.0.0
+# black>=23.0.0
+# flake8>=6.0.0

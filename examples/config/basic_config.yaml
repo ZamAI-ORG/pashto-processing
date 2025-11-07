@@ -1,0 +1,259 @@
+# Basic Configuration - Simple text processing
+# This configuration is suitable for basic Pashto text processing tasks
+
+pipeline:
+  name: "Basic Pashto Text Processing"
+  version: "1.0"
+  description: "Simple configuration for basic text processing"
+  author: "Pashto Pipeline Team"
+  created: "2025-11-06"
+
+# Input Configuration
+input:
+  # Data source settings
+  data_directory: "data/raw"
+  recursive: true
+  max_files: 1000
+  
+  # Supported file formats
+  supported_formats: 
+    - "txt"    # Plain text files
+    - "json"   # JSON files
+    - "csv"    # CSV files
+    - "xml"    # XML files
+  
+  # File handling
+  encoding: "utf-8"
+  encoding_fallback: ["utf-8", "cp1256", "iso-8859-1"]
+  skip_empty_files: true
+  min_file_size: 10  # bytes
+  max_file_size: "100MB"
+  
+  # File patterns
+  include_patterns: ["*.txt", "*.json", "*.csv"]
+  exclude_patterns: ["*~", "*.bak", ".git/*", "*.tmp"]
+
+# Processing Configuration
+processing:
+  # Text normalization
+  normalize_text: true
+  normalization_form: "NFC"  # NFC, NFD, NFKC, NFKD
+  remove_bom: true
+  convert_arabic_digits: false  # Keep original digits
+  convert_persian_digits: false
+  
+  # Character handling
+  remove_control_chars: true
+  remove_zero_width: true
+  remove_bidirectional_markers: false
+  
+  # Content removal
+  remove_urls: true
+  remove_emails: true
+  remove_phone_numbers: false  # Keep phone numbers
+  remove_addresses: false
+  
+  # Punctuation handling
+  remove_punctuation: false
+  keep_sentence_endings: true
+  keep_quotes: true
+  
+  # Spacing
+  normalize_spaces: true
+  remove_extra_blank_lines: true
+  fix_arabic_spacing: true
+  
+  # Length and content filtering
+  filter_min_length: 5   # Minimum characters
+  filter_max_length: 5000 # Maximum characters
+  require_min_words: 2
+  require_max_words: 500
+  
+  # Language filtering
+  require_pashto: true
+  min_pashto_ratio: 0.7  # 70% Pashto content required
+  detect_other_languages: ["english", "dari", "urdu", "persian"]
+  
+  # Deduplication
+  remove_duplicates: true
+  duplicate_strategy: "exact"  # exact, fuzzy, semantic
+  case_sensitive: false
+  ignore_whitespace: true
+  
+  # Noise removal
+  remove_spam_patterns: true
+  remove_repetitive_text: true
+  max_repetition_ratio: 0.3
+
+# Output Configuration
+output:
+  # Output destination
+  data_directory: "data/processed"
+  create_subdirs: true
+  
+  # Format settings
+  format: "json"  # json, csv, xml, parquet
+  include_metadata: true
+  include_statistics: true
+  pretty_print: false  # Minify JSON output
+  
+  # Compression (disabled for basic usage)
+  compress_output: false
+  compression_format: "gzip"
+  
+  # File naming
+  filename_pattern: "{date}_{source}_{type}.{ext}"
+  include_timestamp: true
+  include_source_in_filename: true
+  
+  # JSON specific options
+  json_options:
+    indent: 2
+    ensure_ascii: true
+    sort_keys: false
+    include_pipeline_info: true
+    include_quality_metrics: true
+    include_processing_time: true
+  
+  # CSV specific options (if using CSV format)
+  csv_options:
+    delimiter: ","
+    quotechar: '"'
+    include_header: true
+    encoding: "utf-8"
+    columns:
+      - "text"
+      - "source_file"
+      - "quality_score"
+      - "word_count"
+      - "char_count"
+      - "language_confidence"
+
+# Quality Configuration
+quality:
+  # Quality scoring
+  enable_quality_scoring: true
+  min_quality_score: 0.6  # Minimum acceptable quality
+  
+  # Individual quality metrics
+  metrics:
+    grammar:
+      enabled: true
+      weight: 0.3
+      min_score: 0.5
+    
+    coherence:
+      enabled: true
+      weight: 0.3
+      min_score: 0.4
+    
+    relevance:
+      enabled: true
+      weight: 0.2
+      min_score: 0.6
+    
+    technical:
+      enabled: true
+      weight: 0.2
+      max_typo_ratio: 0.1
+      max_encoding_errors: 0.05
+      max_formatting_issues: 0.2
+  
+  # Pashto language quality
+  require_pashto: true
+  min_pashto_ratio: 0.7
+  detect_other_languages: ["english", "dari", "urdu", "persian"]
+  
+  # Text structure quality
+  require_proper_casing: false  # Not applicable for Pashto
+  require_proper_spacing: true
+  require_sentence_structure: true
+  min_sentences: 1
+  max_sentences: 50
+  
+  # Content quality
+  check_spellings: false  # Disabled for basic usage
+  grammar_check: false
+  spell_check: false
+
+# Logging Configuration
+logging:
+  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  level: "INFO"
+  console: true
+  file: "logs/basic_pipeline.log"
+  
+  # Log rotation
+  max_file_size: "50MB"
+  backup_count: 3
+  
+  # Log format
+  format: "[{timestamp}] {level:8} {name:20} {message}"
+  date_format: "%Y-%m-%d %H:%M:%S"
+  
+  # Filtering
+  log_filtered_items: false
+  log_quality_scores: true
+  log_processing_stats: true
+
+# Advanced Configuration (Basic Settings)
+advanced:
+  # Performance settings (conservative for basic usage)
+  max_workers: 2
+  use_multiprocessing: false  # Single-threaded for simplicity
+  process_pool_size: 1
+  
+  # Memory management
+  memory_limit: "2GB"
+  garbage_collect_frequency: 100  # items
+  cache_intermediate_results: false  # Disabled for basic usage
+  
+  # Batch processing
+  batch_size: 50
+  streaming_mode: false
+  
+  # Validation
+  strict_validation: false
+  validate_input_integrity: true
+  
+  # Caching (disabled for basic usage)
+  enable_caching: false
+  cache_directory: "cache"
+  cache_ttl: 3600  # seconds
+  
+  # I/O settings
+  use_memory_mapping: false
+  async_io: false
+  io_buffer_size: "1MB"
+
+# Environment-specific overrides
+environments:
+  development:
+    logging:
+      level: "DEBUG"
+      console: true
+    advanced:
+      max_workers: 1
+      batch_size: 10
+    quality:
+      min_quality_score: 0.5  # Lower threshold for testing
+  
+  production:
+    logging:
+      level: "INFO"
+      console: false
+      file: "/var/log/pashto-pipeline/basic.log"
+    advanced:
+      max_workers: 8
+      batch_size: 200
+    quality:
+      min_quality_score: 0.7  # Higher threshold for production
+  
+  testing:
+    logging:
+      level: "WARNING"
+    advanced:
+      max_workers: 1
+      batch_size: 5
+    quality:
+      enable_quality_scoring: false  # Skip quality checks for speed

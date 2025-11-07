@@ -1,0 +1,262 @@
+{
+  "text_processing": {
+    "encoding_handling": {
+      "unicode_normalization": {
+        "enabled": true,
+        "form": "NFC",
+        "remove_zero_width": true,
+        "normalize_arabic_shapes": true,
+        "handle_combining_marks": true
+      },
+      "encoding_detection": {
+        "auto_detect": true,
+        "fallback_encoding": "utf-8",
+        "confidence_threshold": 0.8,
+        "try_encodings": ["utf-8", "iso-8859-1", "windows-1252", "cp1256"]
+      },
+      "bidirectional_text": {
+        "handle_rtl": true,
+        "preserve_direction_markers": false,
+        "normalize_bidi_controls": true,
+        "detect_mixed_content": true
+      }
+    },
+    "pashto_specific": {
+      "script_handling": {
+        "perso_arabic_script": true,
+        "preserve_diacritics": true,
+        "handle_ligatures": true,
+        "normalize_variant_forms": true
+      },
+      "character_processing": {
+        "pashto_unicode_ranges": [
+          "U+0600-U+06FF",
+          "U+0750-U+077F",
+          "U+FB50-U+FDFF",
+          "U+FE70-U+FEFF"
+        ],
+        "valid_pashto_chars": true,
+        "remove_foreign_chars": false,
+        "replace_invalid_chars": true
+      },
+      "word_segmentation": {
+        "method": "space_based",
+        "preserve_compounds": true,
+        "handle_english_words": true,
+        "normalize_word_forms": false
+      }
+    },
+    "preprocessing_steps": [
+      "decode_unicode",
+      "normalize_text", 
+      "remove_html_tags",
+      "remove_special_chars",
+      "filter_language",
+      "segment_text",
+      "quality_assessment"
+    ]
+  },
+  "language_processing": {
+    "detection": {
+      "primary_method": "langdetect",
+      "secondary_method": "char_frequency",
+      "confidence_threshold": 0.7,
+      "pashto_recognition": {
+        "unicode_range_check": true,
+        "character_frequency_analysis": true,
+        "common_pashto_words": true,
+        "morphological_analysis": false
+      }
+    },
+    "normalization": {
+      "text": {
+        "lowercase": false,
+        "remove_punctuation": false,
+        "normalize_numbers": false,
+        "preserve_quotes": true,
+        "preserve_parentheses": true
+      },
+      "pashto_specific": {
+        "normalize_hamza": false,
+        "normalize_teh_marbuta": false,
+        "normalize_alif_maqsura": false,
+        "preserve_orf": true
+      }
+    },
+    "tokenization": {
+      "word_tokens": {
+        "method": "regex",
+        "pattern": "\\S+",
+        "preserve_hyphens": true,
+        "preserve_aposrophes": true
+      },
+      "sentence_tokens": {
+        "method": "regex", 
+        "pattern": "[.!?]+",
+        "preserve_abbreviations": true
+      }
+    }
+  },
+  "quality_assessment": {
+    "content_quality": {
+      "length_metrics": {
+        "min_text_length": 50,
+        "max_text_length": 100000,
+        "min_word_count": 10,
+        "optimal_word_count_range": [100, 5000]
+      },
+      "content_metrics": {
+        "pashto_char_ratio": 0.6,
+        "unique_word_ratio": 0.3,
+        "sentence_density": 0.1,
+        "paragraph_coherence": 0.5
+      },
+      "technical_metrics": {
+        "encoding_validity": 1.0,
+        "unicode_coverage": 0.8,
+        "character_diversity": 0.2,
+        "template_content_ratio": 0.1
+      }
+    },
+    "automated_filters": {
+      "spam_detection": {
+        "enabled": true,
+        "method": "content_analysis",
+        "threshold": 0.8,
+        "false_positive_rate": 0.05
+      },
+      "duplicate_detection": {
+        "enabled": true,
+        "method": "fuzzy_matching",
+        "threshold": 0.9,
+        "hash_algorithm": "simhash"
+      },
+      "language_purity": {
+        "min_pashto_ratio": 0.7,
+        "allow_english_numbers": true,
+        "allow_dari_mixing": 0.2,
+        "strict_filtering": false
+      }
+    }
+  },
+  "data_enrichment": {
+    "metadata_extraction": {
+      "document_info": {
+        "title": true,
+        "author": true,
+        "date": true,
+        "source": true,
+        "url": true
+      },
+      "linguistic_info": {
+        "word_count": true,
+        "sentence_count": true,
+        "paragraph_count": true,
+        "character_count": true,
+        "language_confidence": true
+      },
+      "technical_info": {
+        "encoding": true,
+        "format": true,
+        "extraction_method": true,
+        "processing_date": true
+      }
+    },
+    "content_analysis": {
+      "topic_modeling": false,
+      "sentiment_analysis": false,
+      "named_entity_recognition": false,
+      "pos_tagging": false,
+      "dependency_parsing": false
+    }
+  },
+  "output_formatting": {
+    "json_format": {
+      "structure": {
+        "content": "main_text",
+        "metadata": "document_metadata",
+        "linguistics": "language_analysis",
+        "quality": "quality_metrics",
+        "processing": "processing_info"
+      },
+      "encoding": "utf-8",
+      "pretty_print": false,
+      "ensure_ascii": false
+    },
+    "csv_format": {
+      "delimiter": ",",
+      "quote_char": "\"",
+      "include_header": true,
+      "encoding": "utf-8-sig"
+    },
+    "text_format": {
+      "line_ending": "unix",
+      "encoding": "utf-8",
+      "add_bom": false,
+      "paragraph_separator": "\\n\\n"
+    }
+  },
+  "error_handling": {
+    "encoding_errors": {
+      "fallback_strategy": "skip_invalid",
+      "log_errors": true,
+      "preserve_raw_text": true
+    },
+    "processing_errors": {
+      "skip_failed_documents": true,
+      "log_processing_stats": true,
+      "generate_error_report": true
+    },
+    "quality_failures": {
+      "low_quality_action": "flag_for_review",
+      "minimum_quality_threshold": 0.6,
+      "quarantine_failures": true
+    }
+  },
+  "performance_optimization": {
+    "batch_processing": {
+      "batch_size": 100,
+      "parallel_processes": 4,
+      "memory_limit_mb": 1024,
+      "temp_storage": "temp/processed/"
+    },
+    "caching": {
+      "language_detection_cache": true,
+      "encoding_detection_cache": true,
+      "quality_assessment_cache": true,
+      "cache_size_limit": 10000
+    }
+  },
+  "validation_rules": {
+    "required_fields": [
+      "content",
+      "language",
+      "quality_score",
+      "word_count"
+    ],
+    "field_validation": {
+      "content": {
+        "type": "string",
+        "min_length": 50,
+        "max_length": 100000,
+        "required": true
+      },
+      "language": {
+        "type": "string",
+        "pattern": "^ps$",
+        "required": true
+      },
+      "quality_score": {
+        "type": "float",
+        "min_value": 0.0,
+        "max_value": 1.0,
+        "required": true
+      },
+      "word_count": {
+        "type": "integer",
+        "min_value": 10,
+        "required": true
+      }
+    }
+  }
+}

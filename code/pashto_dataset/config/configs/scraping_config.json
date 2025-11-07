@@ -1,0 +1,223 @@
+{
+  "scraping_strategies": {
+    "web_scraping": {
+      "base_config": {
+        "user_agent": "PashtoDatasetBot/1.0 (Research; contact@pashtonlp.org)",
+        "delay_between_requests": 2,
+        "max_retries": 3,
+        "timeout": 30,
+        "respect_robots_txt": true,
+        "random_user_agents": [
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+        ],
+        "session_management": true,
+        "cookie_handling": true,
+        "proxy_support": false
+      },
+      "pashto_specific_handling": {
+        "encoding_detection": true,
+        "force_utf8": true,
+        "handle_rtl": true,
+        "preserve_unicode": true,
+        "remove_html_entities": true,
+        "extract_meta_language": true
+      }
+    },
+    "api_scraping": {
+      "base_config": {
+        "rate_limiting": true,
+        "authentication_handling": true,
+        "pagination_support": true,
+        "batch_processing": true,
+        "response_validation": true
+      },
+      "common_parameters": {
+        "format": "json",
+        "limit": 100,
+        "offset": 0,
+        "language": "ps"
+      }
+    }
+  },
+  "source_specific_configs": {
+    "acku_digital_repository": {
+      "scraping_method": "api_scraping",
+      "base_url": "https://www.afghandata.org/api",
+      "endpoints": {
+        "books": "/books",
+        "manuscripts": "/manuscripts", 
+        "documents": "/documents",
+        "search": "/search"
+      },
+      "parameters": {
+        "language": "ps",
+        "format": "json",
+        "limit": 50
+      },
+      "pagination": {
+        "type": "offset",
+        "offset_param": "offset",
+        "limit_param": "limit"
+      },
+      "authentication": {
+        "type": "bearer_token",
+        "header": "Authorization",
+        "token_format": "Bearer {token}"
+      },
+      "rate_limit": 60,
+      "data_extraction": {
+        "text_fields": ["title", "content", "description", "full_text"],
+        "metadata_fields": ["author", "date", "language", "type", "id"],
+        "file_urls": ["pdf_url", "image_urls", "document_url"]
+      }
+    },
+    "afghanistan_digital_library": {
+      "scraping_method": "web_scraping",
+      "base_url": "https://findingaids.library.nyu.edu/archives/rg_38_29/",
+      "selectors": {
+        "content": ".content, .description, .text-content",
+        "title": "h1, h2, .title",
+        "metadata": ".metadata, .description",
+        "links": "a[href]",
+        "documents": ".document, .file, a[href$='.pdf']"
+      },
+      "navigation": {
+        "pagination": ".pagination a, .next, .page-numbers",
+        "categories": ".category, .subject, .topic",
+        "browse_paths": ["/books", "/documents", "/manuscripts"]
+      },
+      "file_handling": {
+        "pdf_extraction": true,
+        "ocr_required": false,
+        "download_concurrent": 3
+      }
+    },
+    "pashto_academy_peshawar": {
+      "scraping_method": "web_scraping",
+      "base_url": "https://pashtoacademy.edu.pk/",
+      "selectors": {
+        "articles": ".article, .research-paper, .journal-article",
+        "content": ".article-content, .abstract, .full-text",
+        "title": "h1, h2, .article-title",
+        "metadata": ".metadata, .author-info, .publication-date"
+      },
+      "endpoints": {
+        "journal": "/showArticle.php",
+        "archive": "/journal-archive",
+        "search": "/search.php"
+      },
+      "authentication": {
+        "required": true,
+        "method": "login_form",
+        "login_url": "/login",
+        "credential_fields": ["username", "password"]
+      },
+      "rate_limit": 15
+    },
+    "archive_org_pashto": {
+      "scraping_method": "api_scraping",
+      "base_url": "https://archive.org/advancedsearch.php",
+      "api_params": {
+        "q": "language:ps AND format:(PDF OR Text)",
+        "fl[]": ["identifier", "title", "description", "downloads", "date"],
+        "output": "json",
+        "rows": 100
+      },
+      "download_strategy": {
+        "concurrent_downloads": 5,
+        "retry_failed": true,
+        "save_metadata": true
+      }
+    }
+  },
+  "content_extraction": {
+    "html_parsing": {
+      "library": "beautifulsoup4",
+      "parser": "lxml",
+      "encodings": ["utf-8", "iso-8859-1", "windows-1252"],
+      "remove_tags": ["script", "style", "nav", "footer", "header", "aside"],
+      "preserve_tags": ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "blockquote"]
+    },
+    "text_processing": {
+      "join_paragraphs": true,
+      "preserve_line_breaks": false,
+      "remove_empty_lines": true,
+      "normalize_whitespace": true,
+      "extract_lists": true
+    },
+    "pdf_processing": {
+      "library": "PyPDF2",
+      "ocr_fallback": "pytesseract",
+      "text_extraction": "layout_aware",
+      "table_extraction": true,
+      "metadata_extraction": true
+    }
+  },
+  "language_detection": {
+    "primary_method": "langdetect",
+    "fallback_methods": ["char_freq_analysis", "unicode_range_analysis"],
+    "confidence_threshold": 0.7,
+    "pashto_specific": {
+      "script_detection": true,
+      "check_perso_arabic": true,
+      "unicode_range": "U+0600-U+06FF,U+0750-U+077F,U+FB50-U+FDFF,U+FE70-U+FEFF",
+      "min_pashto_chars": 10
+    }
+  },
+  "quality_filters": {
+    "length_filtering": {
+      "min_chars": 50,
+      "max_chars": 100000,
+      "min_words": 10
+    },
+    "content_filtering": {
+      "remove_templates": true,
+      "remove_navigation": true,
+      "remove_boilerplate": true,
+      "remove_duplicates": true,
+      "duplicate_threshold": 0.9
+    },
+    "quality_scoring": {
+      "text_to_html_ratio": 0.3,
+      "pashto_char_ratio": 0.6,
+      "word_density": 0.1,
+      "sentence_length_range": [3, 200]
+    }
+  },
+  "error_handling": {
+    "http_errors": {
+      "retry_status_codes": [429, 500, 502, 503, 504],
+      "max_retries": 3,
+      "backoff_strategy": "exponential"
+    },
+    "parsing_errors": {
+      "encoding_fallback": "utf-8",
+      "skip_failed_documents": true,
+      "log_errors": true
+    },
+    "data_quality": {
+      "skip_low_quality": true,
+      "minimum_quality_score": 0.6,
+      "log_quality_issues": true
+    }
+  },
+  "output_formatting": {
+    "standard_fields": {
+      "content": "extracted_text",
+      "metadata": "document_metadata",
+      "source": "source_information",
+      "quality": "quality_metrics",
+      "language": "language_detection",
+      "url": "source_url"
+    },
+    "metadata_fields": [
+      "title", "author", "date", "language", "type", 
+      "word_count", "char_count", "quality_score", 
+      "extraction_method", "source_url", "crawl_date"
+    ],
+    "export_formats": ["json", "csv", "txt", "xml"],
+    "compression": "gzip"
+  }
+}

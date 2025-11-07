@@ -1,0 +1,92 @@
+{
+  "project": {
+    "name": "Pashto Dataset Pipeline",
+    "version": "1.0.0",
+    "description": "Comprehensive configuration for Pashto text dataset collection and processing",
+    "created_date": "2025-11-06",
+    "maintainer": "Pashto NLP Research Team"
+  },
+  "global_settings": {
+    "encoding": {
+      "default": "utf-8",
+      "force_utf8": true,
+      "normalize_unicode": true,
+      "normalization_form": "NFC",
+      "handle_bidirectional": true,
+      "remove_zero_width_chars": true
+    },
+    "text_processing": {
+      "min_text_length": 50,
+      "max_text_length": 100000,
+      "min_pashto_ratio": 0.7,
+      "remove_duplicates": true,
+      "spam_detection": true,
+      "quality_threshold": 0.6
+    },
+    "output": {
+      "formats": ["json", "csv", "txt", "xml"],
+      "compression": "gzip",
+      "batch_size": 1000,
+      "include_metadata": true
+    },
+    "logging": {
+      "level": "INFO",
+      "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+      "file": "logs/pashto_dataset.log",
+      "max_size_mb": 100,
+      "backup_count": 5
+    }
+  },
+  "preprocessing": {
+    "steps": [
+      "normalize_unicode",
+      "remove_html_tags",
+      "remove_special_chars",
+      "filter_language",
+      "remove_duplicates",
+      "quality_filter"
+    ],
+    "pashto_specific": {
+      "handle_rtl_text": true,
+      "preserve_diacritics": true,
+      "normalize_arabic_forms": true,
+      "fix_encoding_issues": true
+    }
+  },
+  "quality_control": {
+    "automated_checks": [
+      "character_validation",
+      "language_detection",
+      "length_filtering",
+      "duplicate_detection",
+      "spam_detection"
+    ],
+    "thresholds": {
+      "min_pashto_char_ratio": 0.6,
+      "min_unicode_coverage": 0.8,
+      "max_foreign_char_ratio": 0.3,
+      "min_sentence_length": 5,
+      "max_sentence_length": 200
+    },
+    "manual_review": {
+      "sample_rate": 0.1,
+      "expert_review": true,
+      "community_validation": false
+    }
+  },
+  "data_storage": {
+    "structure": {
+      "raw": "data/raw/",
+      "processed": "data/processed/",
+      "validated": "data/validated/",
+      "final": "data/final/",
+      "temp": "data/temp/"
+    },
+    "backup": {
+      "enabled": true,
+      "location": "backups/",
+      "retention_days": 90,
+      "compression": true
+    }
+  }
+}
