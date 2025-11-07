@@ -1,0 +1,444 @@
+# Batch Processing Configuration
+# High-performance configuration for processing large Pashto datasets
+
+pipeline:
+  name: "High-Performance Pashto Batch Processing"
+  version: "1.0"
+  description: "Optimized configuration for large-scale batch processing"
+  author: "Pashto Pipeline Team"
+  created: "2025-11-06"
+
+# Input Configuration
+input:
+  data_directory: "data/batch_input"
+  recursive: true
+  max_files: 100000  # Large number for batch processing
+  
+  supported_formats: ["txt", "json", "csv", "xml", "parquet"]
+  
+  encoding: "utf-8"
+  encoding_fallback: ["utf-8", "cp1256", "iso-8859-1", "utf-16"]
+  skip_empty_files: true
+  min_file_size: 1  # 1 byte minimum
+  max_file_size: "1GB"  # Support for very large files
+  
+  # Advanced file patterns
+  include_patterns: 
+    - "*.txt"
+    - "*.json"
+    - "*.csv"
+    - "*.xml"
+    - "*.parquet"
+    - "*.jsonl"
+  exclude_patterns: 
+    - "*.tmp"
+    - "*.bak"
+    - ".git/*"
+    - "cache/*"
+    - "logs/*"
+    - "backup/*"
+  
+  # Batch-specific input settings
+  batch_file_patterns:
+    - "part-*.csv"
+    - "chunk-*.json"
+    - "data-*.txt"
+  
+  # Streaming for very large files
+  enable_streaming: true
+  stream_chunk_size: 10000  # lines per chunk
+  memory_limit_per_file: "500MB"
+
+# Processing Configuration - High Performance
+processing:
+  # Aggressive parallel processing
+  normalize_text: true
+  normalization_form: "NFC"
+  remove_bom: true
+  convert_arabic_digits: true
+  convert_persian_digits: true
+  
+  # Fast character processing
+  remove_control_chars: true
+  remove_zero_width: true
+  remove_bidirectional_markers: false
+  
+  # Content removal (optimized)
+  remove_urls: true
+  remove_emails: true
+  remove_phone_numbers: false
+  remove_addresses: false
+  
+  # Punctuation handling
+  remove_punctuation: false
+  keep_sentence_endings: true
+  keep_quotes: true
+  
+  # Spacing optimization
+  normalize_spaces: true
+  remove_extra_blank_lines: true
+  fix_arabic_spacing: true
+  
+  # Flexible length filtering for diverse data
+  filter_min_length: 1   # Very permissive
+  filter_max_length: 50000
+  require_min_words: 1
+  require_max_words: 10000
+  
+  # Language filtering (optimized)
+  require_pashto: false  # Allow mixed content for batch processing
+  min_pashto_ratio: 0.3  # Lower threshold for large-scale processing
+  detect_other_languages: ["english", "dari", "urdu", "persian", "arabic", "turkish"]
+  
+  # Aggressive deduplication
+  remove_duplicates: true
+  duplicate_strategy: "fuzzy"  # Use fuzzy matching
+  fuzzy_threshold: 0.9
+  fuzzy_algorithm: "levenshtein"  # Fast algorithm
+  max_fuzzy_distance: 5
+  case_sensitive: false
+  ignore_whitespace: true
+  
+  # Noise removal
+  remove_spam_patterns: true
+  remove_repetitive_text: true
+  max_repetition_ratio: 0.5  # More permissive
+  
+  # Batch-specific optimizations
+  enable_parallel_processing: true
+  use_vectorized_operations: true
+  optimize_for_throughput: true
+  skip_expensive_checks: true
+  
+  # Memory-efficient processing
+  streaming_mode: true
+  chunk_processing: true
+  garbage_collect_frequently: true
+
+# Output Configuration
+output:
+  data_directory: "data/batch_output"
+  create_subdirs: true
+  
+  # Efficient output formats
+  format: "parquet"  # Most efficient for large datasets
+  include_metadata: false  # Disabled for performance
+  include_statistics: true
+  pretty_print: false
+  
+  # Compression for large outputs
+  compress_output: true
+  compression_format: "gzip"  # Good balance of speed and compression
+  
+  # Sharding for large datasets
+  shard_output: true
+  shard_size: 10000  # 10k records per shard
+  shard_by: "source"  # Shard by source file
+  
+  # File organization for batch processing
+  organize_by_date: false  # Not needed for batch
+  organize_by_size: true   # Organize by output size
+  
+  # Efficient file naming
+  filename_pattern: "batch_{timestamp}_{shard:03d}.{ext}"
+  include_timestamp: true
+  include_shard_number: true
+  
+  # Parquet-specific settings
+  parquet_options:
+    compression: "gzip"
+    compression_level: 6
+    row_group_size: 10000
+    use_dictionary: true
+    write_statistics: true
+    
+  # CSV fallback options
+  csv_options:
+    delimiter: "\t"  # Tab-delimited for better performance
+    quotechar: '"'
+    include_header: true
+    encoding: "utf-8"
+    lineterminator: "\n"  # Unix line endings
+    columns:
+      - "text"
+      - "source_file"
+      - "word_count"
+      - "char_count"
+      - "quality_score"
+      - "language_confidence"
+
+# Quality Configuration - Optimized for Scale
+quality:
+  # Fast quality assessment
+  enable_quality_scoring: true
+  min_quality_score: 0.3  # Very permissive for large-scale processing
+  
+  # Simplified quality metrics for speed
+  metrics:
+    basic:
+      enabled: true
+      weight: 0.8
+      check_length: true
+      check_characters: true
+    
+    language:
+      enabled: true
+      weight: 0.2
+      min_pashto_ratio: 0.3
+      fast_detection: true  # Use fast language detection
+    
+    # Disabled expensive checks for batch processing
+    grammar:
+      enabled: false
+    coherence:
+      enabled: false
+    relevance:
+      enabled: false
+  
+  # Sampling for large datasets
+  quality_sampling:
+    enabled: true
+    sample_rate: 0.1  # Check 10% of data
+    min_sample_size: 1000
+    max_sample_size: 10000
+  
+  # Approximate scoring for performance
+  approximate_scoring: true
+  fast_quality_heuristics: true
+  skip_deep_analysis: true
+
+# Logging Configuration
+logging:
+  level: "WARNING"  # Reduce log verbosity for performance
+  console: false    # Disable console logging for batch processing
+  file: "logs/batch_processing.log"
+  
+  # Efficient logging
+  log_filtered_items: false
+  log_quality_scores: false  # Don't log individual scores for performance
+  log_processing_stats: true
+  log_progress_interval: 10000  # Log progress every 10k items
+  
+  # Log rotation for long batch jobs
+  max_file_size: "500MB"
+  backup_count: 10
+  
+  # Separate logs for monitoring
+  loggers:
+    progress:
+      level: "INFO"
+      file: "logs/batch_progress.log"
+      interval: 1000  # Log every 1k items
+    errors:
+      level: "ERROR"
+      file: "logs/batch_errors.log"
+    performance:
+      level: "INFO"
+      file: "logs/batch_performance.log"
+
+# Advanced Configuration - High Performance
+advanced:
+  # Maximum performance settings
+  max_workers: 16  # Use all available cores
+  use_multiprocessing: true
+  process_pool_size: 12  # Leave some cores for other processes
+  
+  # Memory optimization
+  memory_limit: "32GB"  # Use available memory
+  garbage_collect_frequency: 1000  # GC every 1000 items
+  cache_intermediate_results: false  # Disable caching for memory
+  aggressive_gc: true
+  
+  # I/O optimization
+  use_memory_mapping: true
+  async_io: true
+  io_buffer_size: "64MB"  # Large I/O buffer
+  direct_io: true  # Bypass system cache
+  
+  # Batch processing
+  batch_size: 5000  # Large batches for efficiency
+  chunk_size: 50000  # Very large chunks
+  streaming_chunk_size: 10000
+  
+  # Performance monitoring
+  enable_profiling: true
+  profile_output: "logs/batch_profile.prof"
+  performance_monitoring: true
+  
+  # Fault tolerance
+  checkpoint_enabled: true
+  checkpoint_interval: 10000  # Checkpoint every 10k items
+  resume_from_checkpoint: true
+  max_retries: 5
+  
+  # Hardware optimization
+  cpu_affinity: true  # Pin processes to CPU cores
+  numa_aware: true    # NUMA-aware memory allocation
+  pin_memory: true    # Pin memory for GPU (if available)
+  
+  # Experimental optimizations
+  enable_simd: true   # SIMD instructions if available
+  enable_jit: true    # JIT compilation if available
+  optimize_memory_layout: true
+
+# Database Integration - For Large Scale
+database:
+  enabled: false  # Disabled by default for file-based batch processing
+  # connection_url: "postgresql://user:password@localhost/batch_db"
+  
+  # Database batch settings
+  batch_insert_size: 10000
+  connection_pool_size: 20
+  query_timeout: 300
+  
+  # Table schema for batch data
+  table_schema:
+    text_content: "TEXT NOT NULL"
+    source_file: "VARCHAR(500)"
+    file_hash: "VARCHAR(64)"
+    word_count: "INTEGER"
+    char_count: "INTEGER"
+    quality_score: "FLOAT"
+    processing_date: "TIMESTAMP"
+    batch_id: "VARCHAR(100)"
+    metadata: "JSONB"
+  
+  # Indexes for performance
+  indexes:
+    - "batch_id"
+    - "processing_date"
+    - "quality_score"
+    - "source_file"
+    - "file_hash"
+
+# Monitoring and Metrics
+monitoring:
+  enabled: true
+  metrics_backend: "prometheus"  # or "influxdb", "elasticsearch"
+  
+  # Performance metrics
+  collect_performance_metrics: true
+  collect_memory_metrics: true
+  collect_io_metrics: true
+  
+  # Custom metrics
+  custom_metrics:
+    - "records_processed_per_second"
+    - "throughput_mb_per_second"
+    - "average_processing_time_per_record"
+    - "memory_usage_peak"
+    - "cache_hit_ratio"
+  
+  # Alerting
+  alerting:
+    enabled: true
+    alert_thresholds:
+      processing_rate_below: 100  # records per second
+      memory_usage_above: 0.9      # 90%
+      error_rate_above: 0.05       # 5%
+  
+  # Dashboard
+  dashboard_url: "http://localhost:3000/d/batch-processing"
+  refresh_interval: 30  # seconds
+
+# Backup and Recovery
+backup:
+  enabled: true
+  backup_intermediate_results: true
+  backup_frequency: "hourly"  # Frequent backups for large batch jobs
+  
+  # Incremental backup
+  incremental_backup: true
+  backup_compression: "gzip"
+  backup_encryption: false  # Disabled for performance
+  
+  # Recovery
+  auto_recovery: true
+  recovery_checkpoint_count: 5
+  max_recovery_time: 3600  # 1 hour
+
+# Resource Management
+resources:
+  # CPU management
+  cpu_limit: "100%"  # Use all available CPU
+  cpu_reservation: "80%"  # Reserve 80% of CPU
+  
+  # Memory management
+  memory_limit: "90%"  # Use 90% of available memory
+  memory_reservation: "70%"  # Reserve 70% of memory
+  
+  # Disk management
+  disk_io_limit: "100%"  # Full disk I/O access
+  temp_space_limit: "50GB"  # Limit temporary space usage
+  
+  # Network management
+  network_bandwidth_limit: "1Gbps"  # Limit network usage
+  connection_limit: 100  # Maximum concurrent connections
+
+# Scheduling and Automation
+scheduling:
+  # Batch scheduling
+  auto_start: false
+  auto_restart: true
+  restart_delay: 60  # seconds
+  
+  # Queue management
+  job_queue: "batch_queue"
+  priority_levels: 3  # High, medium, low priority
+  
+  # Notification
+  notifications:
+    completion: true
+    failure: true
+    progress: false  # Don't notify on every progress update
+    
+    # Notification channels
+    email:
+      enabled: false
+      recipients: ["admin@company.com"]
+    
+    slack:
+      enabled: false
+      webhook_url: "https://hooks.slack.com/services/..."
+    
+    webhook:
+      enabled: false
+      url: "https://api.company.com/notifications"
+
+# Environment Overrides
+environments:
+  development:
+    advanced:
+      max_workers: 4
+      batch_size: 100
+      memory_limit: "4GB"
+    quality:
+      min_quality_score: 0.2
+      enable_quality_scoring: false
+    logging:
+      level: "DEBUG"
+      console: true
+  
+  staging:
+    advanced:
+      max_workers: 8
+      batch_size: 1000
+      memory_limit: "16GB"
+    monitoring:
+      enabled: true
+      metrics_backend: "influxdb"
+  
+  production:
+    advanced:
+      max_workers: 32
+      batch_size: 10000
+      memory_limit: "64GB"
+    monitoring:
+      enabled: true
+      metrics_backend: "prometheus"
+    backup:
+      enabled: true
+      backup_frequency: "daily"
+    database:
+      enabled: true
+      connection_url: "postgresql://prod_user:prod_pass@prod-db:5432/pashto_batch"

@@ -1,0 +1,258 @@
+{
+  "sources": {
+    "digital_libraries": {
+      "acku_digital_repository": {
+        "name": "ACKU Digital Repository",
+        "url": "https://www.afghandata.org/",
+        "description": "Afghanistan Center at Kabul University - Premier research institution with extensive primary resources",
+        "access_type": "api",
+        "api_endpoint": "https://www.afghandata.org/api",
+        "rate_limit": 60,
+        "authentication": {
+          "required": true,
+          "type": "institutional"
+        },
+        "content_types": ["books", "manuscripts", "documents", "newspapers"],
+        "languages": ["pashto", "dari", "english"],
+        "quality_score": 9,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "api_based",
+        "data_format": "json",
+        "estimated_size": "large",
+        "update_frequency": "weekly"
+      },
+      "afghanistan_digital_library": {
+        "name": "Afghanistan Digital Library (NYU)",
+        "url": "https://findingaids.library.nyu.edu/archives/rg_38_29/",
+        "description": "576 digitized books, documents, and newspapers related to Afghani literature, politics, economics",
+        "access_type": "web",
+        "rate_limit": 30,
+        "authentication": {
+          "required": false,
+          "type": "none"
+        },
+        "content_types": ["books", "documents", "newspapers"],
+        "languages": ["pashto", "dari", "english"],
+        "quality_score": 8,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "web_scraping",
+        "data_format": "pdf_html",
+        "estimated_size": "medium",
+        "update_frequency": "monthly"
+      },
+      "uno_dari_pashto_collection": {
+        "name": "DigitalCommons@UNO - Dari and Pashto Books",
+        "url": "https://digitalcommons.unomaha.edu/daripashtobooks/",
+        "description": "Part of Arthur Paul Afghanistan Collection at University of Nebraska Omaha",
+        "access_type": "web",
+        "rate_limit": 20,
+        "authentication": {
+          "required": false,
+          "type": "none"
+        },
+        "content_types": ["books", "academic_papers"],
+        "languages": ["pashto", "dari"],
+        "quality_score": 8,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "web_scraping",
+        "data_format": "pdf",
+        "estimated_size": "small",
+        "update_frequency": "monthly"
+      },
+      "ucla_middle_eastern": {
+        "name": "UCLA Library - Middle Eastern Studies",
+        "url": "https://guides.library.ucla.edu/c.php?g=180194&p=1185888",
+        "description": "Islamic manuscripts collection with some Pashto materials",
+        "access_type": "web",
+        "rate_limit": 30,
+        "authentication": {
+          "required": true,
+          "type": "institutional"
+        },
+        "content_types": ["manuscripts", "books"],
+        "languages": ["arabic", "persian", "pashto", "turkish"],
+        "quality_score": 9,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "api_based",
+        "data_format": "various",
+        "estimated_size": "medium",
+        "update_frequency": "quarterly"
+      }
+    },
+    "academic_datasets": {
+      "cc100_pashto": {
+        "name": "CC100-Pashto Dataset",
+        "url": "https://metatext.io/datasets/cc100-pashto",
+        "description": "Monolingual data from Commoncrawl snapshots (2018) - processed from CC-Net repository",
+        "access_type": "download",
+        "rate_limit": 10,
+        "authentication": {
+          "required": false,
+          "type": "none"
+        },
+        "content_types": ["web_text", "monolingual_corpus"],
+        "languages": ["pashto"],
+        "quality_score": 7,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "batch_download",
+        "data_format": "json_lines",
+        "estimated_size": "very_large",
+        "update_frequency": "static"
+      },
+      "epld_dataset": {
+        "name": "English-Pashto Language Dataset (EPLD)",
+        "url": "https://www.kaggle.com/datasets/rabiakhan827/english-pashto-language-dataset-epld",
+        "description": "Parallel corpus for language learning and NLP research",
+        "access_type": "download",
+        "rate_limit": 10,
+        "authentication": {
+          "required": true,
+          "type": "kaggle_account"
+        },
+        "content_types": ["parallel_text", "bilingual_corpus"],
+        "languages": ["pashto", "english"],
+        "quality_score": 8,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "batch_download",
+        "data_format": "csv",
+        "estimated_size": "medium",
+        "update_frequency": "static"
+      },
+      "nlpashto_corpus": {
+        "name": "NLPashto Corpus",
+        "url": "Available through research publications",
+        "description": "15+ million words corpus for NLP applications",
+        "access_type": "research",
+        "rate_limit": 10,
+        "authentication": {
+          "required": true,
+          "type": "research_request"
+        },
+        "content_types": ["corpus", "nlp_data"],
+        "languages": ["pashto"],
+        "quality_score": 8,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "research_contact",
+        "data_format": "various",
+        "estimated_size": "large",
+        "update_frequency": "static"
+      }
+    },
+    "newspapers_media": {
+      "afghan_central_press": {
+        "name": "Afghan Central Press (MENALIB)",
+        "url": "https://www.menalib.de/en/vifa/fid-lizenzen/afghan-central-press/",
+        "description": "Digital archives of 4 Kabul-based newspapers with national license access",
+        "access_type": "web",
+        "rate_limit": 30,
+        "authentication": {
+          "required": true,
+          "type": "institutional_license"
+        },
+        "content_types": ["news", "articles", "newspapers"],
+        "languages": ["pashto", "dari"],
+        "quality_score": 8,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "web_scraping",
+        "data_format": "html_pdf",
+        "estimated_size": "medium",
+        "update_frequency": "daily"
+      },
+      "khalq_newspaper": {
+        "name": "Khalq Newspaper Archives (UNO)",
+        "url": "https://digitalcommons.unomaha.edu/khalq/",
+        "description": "Historical newspaper archives from Arthur Paul Afghanistan Collection",
+        "access_type": "web",
+        "rate_limit": 20,
+        "authentication": {
+          "required": false,
+          "type": "none"
+        },
+        "content_types": ["newspapers", "historical_documents"],
+        "languages": ["pashto", "dari"],
+        "quality_score": 8,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "web_scraping",
+        "data_format": "pdf",
+        "estimated_size": "small",
+        "update_frequency": "static"
+      }
+    },
+    "specialized_institutions": {
+      "pashto_academy_peshawar": {
+        "name": "Pashto Academy, University of Peshawar",
+        "url": "https://pashtoacademy.edu.pk/",
+        "description": "Academic journal and research materials in Pashto language",
+        "access_type": "web",
+        "rate_limit": 15,
+        "authentication": {
+          "required": true,
+          "type": "academic_subscription"
+        },
+        "content_types": ["research_papers", "journals", "academic_texts"],
+        "languages": ["pashto"],
+        "quality_score": 9,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "web_scraping",
+        "data_format": "pdf_html",
+        "estimated_size": "small",
+        "update_frequency": "quarterly"
+      },
+      "archive_org_pashto": {
+        "name": "Archive.org Pashto Collection",
+        "url": "https://archive.org/details/12-pashto",
+        "description": "Various Pashto books and educational materials",
+        "access_type": "download",
+        "rate_limit": 20,
+        "authentication": {
+          "required": false,
+          "type": "none"
+        },
+        "content_types": ["books", "educational_materials"],
+        "languages": ["pashto"],
+        "quality_score": 6,
+        "last_updated": "2025-11-06",
+        "scraping_strategy": "api_scraping",
+        "data_format": "pdf",
+        "estimated_size": "medium",
+        "update_frequency": "monthly"
+      }
+    }
+  },
+  "source_priorities": {
+    "tier_1": [
+      "acku_digital_repository",
+      "pashto_academy_peshawar",
+      "ucla_middle_eastern"
+    ],
+    "tier_2": [
+      "afghanistan_digital_library",
+      "epld_dataset",
+      "afghan_central_press"
+    ],
+    "tier_3": [
+      "cc100_pashto",
+      "uno_dari_pashto_collection",
+      "archive_org_pashto"
+    ]
+  },
+  "access_requirements": {
+    "institutional": [
+      "acku_digital_repository",
+      "ucla_middle_eastern",
+      "afghan_central_press"
+    ],
+    "research_contact": [
+      "nlpashto_corpus"
+    ],
+    "platform_account": [
+      "epld_dataset"
+    ],
+    "open_access": [
+      "afghanistan_digital_library",
+      "uno_dari_pashto_collection",
+      "khalq_newspaper",
+      "archive_org_pashto"
+    ]
+  }
+}

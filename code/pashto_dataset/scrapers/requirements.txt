@@ -1,0 +1,48 @@
+# Pashto Web Scraping Module Requirements
+# Core dependencies for Pashto text collection and web scraping
+
+# Core web scraping
+requests>=2.28.0
+beautifulsoup4>=4.11.0
+lxml>=4.9.0
+
+# Text processing and encoding
+chardet>=5.0.0
+unicodedata2>=14.0.0  # For Unicode normalization
+
+# Database
+sqlite3  # Built into Python
+
+# Data processing (optional but recommended)
+pandas>=1.5.0
+numpy>=1.21.0
+
+# HTML parsing and processing
+html5lib>=1.1
+selectolax>=0.3.0  # Fast CSS selector alternative
+
+# Configuration and utilities
+pyyaml>=6.0
+python-dateutil>=2.8.0
+
+# Development and testing (optional)
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+flake8>=5.0.0
+
+# OCR support for image documents (optional)
+pytesseract>=0.3.10
+Pillow>=9.0.0
+
+# PDF processing (optional)
+PyPDF2>=3.0.0
+pdfplumber>=0.7.0
+
+# Advanced content extraction (optional)
+readability-lxml>=0.8.1
+newspaper3k>=0.2.8
+
+# Performance and monitoring (optional)
+psutil>=5.9.0
+memory-profiler>=0.60.0

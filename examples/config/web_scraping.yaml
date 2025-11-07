@@ -1,0 +1,443 @@
+# Web Scraping Configuration
+# Advanced configuration for collecting Pashto content from websites
+
+pipeline:
+  name: "Pashto Web Scraping Pipeline"
+  version: "1.0"
+  description: "Web scraping configuration for Pashto content collection"
+  author: "Pashto Pipeline Team"
+  created: "2025-11-06"
+
+# Input Configuration - Web Scraping
+input:
+  # Web scraping source
+  type: "web_scraping"
+  data_directory: null  # Not used for web scraping
+  
+  # Web scraping settings
+  scraping:
+    # Target URLs
+    urls:
+      - "https://www.bbc.com/pashto"
+      - "https://www.afghanistannews.af/pashto"
+      - "https://www.pajhwok.com/ps"
+      - "https://www.1tvnews.af/ps/news"
+      - "https://www.dawnnews.tv/ps"
+      - "https://www.ariananews.af/ps"
+      - "https://www.khabarnama.net/ps"
+      - "https://www.sharq.af/ps"
+    
+    # Multiple page types with different selectors
+    page_types:
+      news_article:
+        url_patterns:
+          - "*/news/*"
+          - "*/article/*"
+          - "*/report/*"
+        selectors:
+          content: "article p, .article-content p, .news-content p"
+          title: "h1, .article-title, .news-title"
+          date: "time, .publish-date, .date, .timestamp"
+          author: ".author, .byline, .journalist"
+          category: ".category, .tags, .section"
+          summary: "p.summary, .article-summary"
+      
+      blog_post:
+        url_patterns:
+          - "*/blog/*"
+          - "*/post/*"
+        selectors:
+          content: ".post-content p, .blog-content p"
+          title: "h1, .post-title, .blog-title"
+          date: "time, .post-date, .blog-date"
+          author: ".post-author, .blog-author"
+      
+      opinion_piece:
+        url_patterns:
+          - "*/opinion/*"
+          - "*/editorial/*"
+        selectors:
+          content: ".opinion-content p, .editorial-content p"
+          title: "h1, .opinion-title, .editorial-title"
+          date: "time, .opinion-date"
+          author: ".opinion-author, .columnist"
+    
+    # Rate limiting and politeness
+    rate_limiting:
+      requests_per_second: 0.5  # Conservative crawling
+      delay_between_requests: 2.0  # 2 seconds between requests
+      timeout: 30  # Request timeout in seconds
+      max_retries: 3
+      retry_delay: 5  # Delay before retry
+      
+      # Respect robots.txt
+      respect_robots_txt: true
+      user_agent: "Mozilla/5.0 (compatible; PashtoDatasetBot/1.0; +https://pashto-pipeline.org/bot)"
+    
+    # Browser settings
+    browser:
+      user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+      headless: true  # Run without GUI
+      window_size: [1920, 1080]
+      page_load_timeout: 30
+      javascript_enabled: true
+      
+      # Network settings
+      ignore_https_errors: false
+      ignore_certificate_errors: false
+      
+      # Cookie and session management
+      enable_cookies: true
+      enable_javascript: true
+      
+      # Viewport settings for responsive sites
+      viewport_width: 1920
+      viewport_height: 1080
+    
+    # Proxy configuration (optional)
+    proxy:
+      enabled: false
+      # proxy_url: "http://proxy.company.com:8080"
+      # username: "proxy_user"
+      # password: "proxy_password"
+      
+      # Proxy rotation
+      rotation_enabled: false
+      proxy_list: []
+    
+    # Content extraction settings
+    extraction:
+      # HTML processing
+      clean_html: true
+      remove_scripts: true
+      remove_styles: true
+      remove_iframes: true
+      remove_meta_refresh: true
+      
+      # Text processing
+      decode_html_entities: true
+      extract_article_text: true
+      preserve_line_breaks: true
+      normalize_whitespace: true
+      
+      # Metadata extraction
+      extract_metadata: true
+      extract_open_graph: true
+      extract_twitter_cards: true
+      extract_schema_org: true
+    
+    # Content filtering
+    content_filter:
+      # Length requirements
+      min_content_length: 100
+      max_content_length: 10000
+      min_title_length: 10
+      max_title_length: 200
+      
+      # Language filtering
+      require_pashto_content: true
+      min_pashto_ratio: 0.8  # 80% Pashto content required
+      
+      # Content patterns
+      include_patterns:
+        - "pashto"  # Include Pashto-related content
+        - "افغان"   # Include Afghan-related content
+        - "پښتو"   # Include Pashto language content
+        - "کابل"    # Include Kabul-related content
+        - "افغانستان"  # Include Afghanistan-related content
+      
+      exclude_patterns:
+        - "advertisement"
+        - "cookie"
+        - "privacy"
+        - "terms"
+        - "sitemap"
+        - "robots.txt"
+        - "404"
+        - "500"
+        - "error"
+        - "test"
+        - "admin"
+        - "login"
+        - "register"
+        - "search"
+        - "contact"
+        - "about"
+        - "archive"
+        - "author"  # Author pages (not content)
+        - "tag"     # Tag pages (not content)
+        - "category" # Category pages (not content)
+    
+    # Pagination handling
+    pagination:
+      enabled: true
+      next_page_selector: "a.next, a[rel='next'], .pagination .next, .pager .next"
+      previous_page_selector: "a.previous, a[rel='prev'], .pagination .previous, .pager .previous"
+      max_pages: 50
+      page_limit_patterns:
+        - "*page/*"
+        - "*?page=*"
+        - "*?p=*"
+      
+    # JavaScript handling
+    javascript:
+      enabled: true
+      wait_time: 5  # Seconds to wait for dynamic content
+      wait_until: "networkidle"  # networkidle, load, domcontentloaded
+      
+      # Scroll handling for infinite scroll
+      scroll_enabled: true
+      scroll_pause_time: 2
+      max_scrolls: 5
+      
+      # Click handling
+      click_selectors: 
+        - ".load-more"
+        - ".show-more"
+        - "button.load"
+        - ".infinite-scroll-trigger"
+
+# Processing Configuration
+processing:
+  # Web content specific processing
+  handle_hashtags: true
+  handle_mentions: true
+  handle_urls: true
+  handle_emojis: true
+  
+  # Text cleaning for web content
+  remove_duplicate_posts: true
+  filter_min_length: 50
+  filter_max_length: 3000
+  require_pashto: true
+  min_pashto_ratio: 0.8
+  
+  # Remove web-specific noise
+  remove_retweet_indicators: true
+  remove_reply_indicators: true
+  extract_original_content: true
+  remove_boilerplate: true
+  
+  # HTML tag removal
+  remove_html_tags: true
+  remove_scripts_and_styles: true
+  decode_html_entities: true
+  
+  # Language handling
+  detect_code_switching: true
+  extract_pashto_segments: true
+  handle_mixed_languages: true
+  
+  # Quality filters for web content
+  filter_news_articles: true
+  filter_blog_posts: true
+  filter_opinion_pieces: true
+  filter_forums: true
+  filter_social_media: false  # Not from social media
+
+# Output Configuration
+output:
+  data_directory: "data/processed/web_scraped"
+  format: "json"
+  include_metadata: true
+  include_source_url: true
+  include_extraction_date: true
+  include_page_structure: true
+  
+  # Comprehensive metadata fields
+  metadata_fields:
+    # Basic info
+    - "url"
+    - "title"
+    - "content"
+    - "summary"
+    
+    # Publication info
+    - "publish_date"
+    - "author"
+    - "category"
+    - "tags"
+    - "source_domain"
+    
+    # Technical info
+    - "extraction_date"
+    - "page_type"
+    - "word_count"
+    - "character_count"
+    - "paragraph_count"
+    
+    # Language info
+    - "primary_language"
+    - "language_confidence"
+    - "pashto_ratio"
+    - "other_languages"
+    
+    # Quality info
+    - "quality_score"
+    - "content_type"
+    - "topic_classification"
+    
+    # Social media specific (if applicable)
+    - "engagement_metrics"
+    - "hashtags"
+    - "mentions"
+    
+    # Web specific
+    - "meta_description"
+    - "meta_keywords"
+    - "open_graph_data"
+    - "schema_org_data"
+
+  # File organization
+  organize_by_date: true
+  organize_by_domain: true
+  organize_by_content_type: true
+  
+  # File naming for web content
+  filename_pattern: "{date}_{domain}_{content_type}_{hash}.{ext}"
+  include_timestamp: true
+  include_domain: true
+  include_content_type: true
+
+# Quality Configuration
+quality:
+  # Web content quality settings
+  min_quality_score: 0.6
+  enable_quality_scoring: true
+  platform_aware_scoring: true
+  
+  # Web-specific quality metrics
+  metrics:
+    content_freshness:
+      enabled: true
+      weight: 0.2
+      max_age_days: 365  # Content older than 1 year
+    
+    content_depth:
+      enabled: true
+      weight: 0.2
+      min_paragraphs: 3
+    
+    content_relevance:
+      enabled: true
+      weight: 0.3
+      relevance_keywords: ["افغان", "پښتو", "افغانستان", "کابل"]
+    
+    technical_quality:
+      enabled: true
+      weight: 0.3
+      max_html_errors: 0.1
+      max_broken_links: 0.05
+  
+  # Content type specific quality
+  content_type_quality:
+    news_article:
+      min_score: 0.7
+      require_source_attribution: true
+      require_publish_date: true
+    
+    blog_post:
+      min_score: 0.6
+      require_author: true
+      require_engagement: false
+    
+    opinion_piece:
+      min_score: 0.6
+      require_author_perspective: true
+      require_argumentation: true
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  console: true
+  file: "logs/web_scraping.log"
+  
+  # Web scraping specific logging
+  log_scrape_progress: true
+  log_url_access: true
+  log_content_extraction: false  # Don't log full content
+  log_errors_only: true
+  
+  # Log rotation for long scraping sessions
+  max_file_size: "100MB"
+  backup_count: 5
+  
+  # Separate logs for different aspects
+  loggers:
+    scraping:
+      level: "INFO"
+      file: "logs/scraping.log"
+    content:
+      level: "WARNING"
+      file: "logs/content.log"
+    errors:
+      level: "ERROR"
+      file: "logs/errors.log"
+
+# Advanced Configuration
+advanced:
+  # Performance settings for web scraping
+  max_workers: 4  # Limit concurrent connections
+  use_multiprocessing: false  # Use threading for I/O bound tasks
+  process_pool_size: 2
+  
+  # Memory management
+  memory_limit: "4GB"
+  cache_web_content: true
+  cache_ttl: 3600  # 1 hour cache
+  
+  # Web scraping specific
+  respect_robots_txt: true
+  max_depth: 2  # Don't scrape too deep
+  max_pages_per_domain: 1000
+  
+  # Browser session management
+  reuse_browser_sessions: true
+  session_timeout: 1800  # 30 minutes
+  
+  # Error handling
+  continue_on_error: true
+  max_consecutive_errors: 10
+  error_backoff_time: 60  # 1 minute backoff on errors
+  
+  # Monitoring
+  enable_monitoring: true
+  progress_report_interval: 100  # Report every 100 URLs
+  health_check_interval: 1000  # Health check every 1000 URLs
+
+# Database integration (optional)
+database:
+  enabled: false
+  connection_url: null
+  # connection_url: "postgresql://user:password@localhost:5432/pashto_web"
+  
+  # Store raw scraped content
+  raw_content_table: "web_scraped_raw"
+  processed_content_table: "web_scraped_processed"
+  
+  # Indexes for performance
+  indexes:
+    - "url"
+    - "domain"
+    - "publish_date"
+    - "extraction_date"
+    - "quality_score"
+    - "content_type"
+
+# Backup and archival
+backup:
+  enabled: true
+  backup_raw_content: true
+  backup_frequency: "daily"
+  backup_retention_days: 30
+  
+  # Compression for backup
+  compress_backups: true
+  backup_format: "gzip"
+  
+  # Remote backup options
+  remote_backup:
+    enabled: false
+    # remote_location: "s3://pashto-pipeline-backup/"
+    # aws_access_key_id: "your_access_key"
+    # aws_secret_access_key: "your_secret_key"
