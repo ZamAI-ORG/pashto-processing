@@ -8,7 +8,7 @@ pymupdf==1.24.12
 pytesseract==0.3.13
 
 # Image processing
-Pillow==10.4.0
+Pillow==12.1.1
 opencv-python==4.10.0.84
 opencv-contrib-python==4.10.0.84
 
@@ -31,7 +31,7 @@ langdetect==1.0.9
 # Development and testing (optional)
 pytest==8.3.3
 pytest-cov==6.0.0
-black==24.10.0
+black==26.3.1
 flake8==7.1.1
 
 # Additional utilities
