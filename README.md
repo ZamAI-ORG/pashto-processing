@@ -6,6 +6,14 @@ Core utilities and pipelines for processing Pashto text — normalization, clean
 - Website: https://zamai.dev
 
 
+# Pashto Processing
+
+Core utilities and pipelines for processing Pashto text — normalization, cleaning, and preprocessing.
+
+- ZamAI Labs: https://github.com/ZamAI-ORG
+- Website: https://zamai.dev
+
+
 # Pashto Processing Pipeline 🇦🇫
 
 [![Documentation Status](https://img.shields.io/badge/docs-latest-blue.svg)](https://github.com/tasal9/Pashto-Processing-pipeline)
